@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Light Against Cyberbullying</title>
+  <style>
+    :root {
+      --mouse-x: 50%;
+      --mouse-y: 40%;
+      --ring-scale: 1;
+      --bg-dark: #060812;
+      --bg-mid: #121d33;
+      --bg-light: #31496d;
+      --text: #eef3ff;
+      --muted: #bcc9dc;
+      --line: rgba(255, 255, 255, 0.12);
+      --gold: #ffe8a6;
+      --gold-strong: #fff3c6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(
+          180deg,
+          var(--bg-dark) 0%,
+          #0a1020 28%,
+          var(--bg-mid) 58%,
+          var(--bg-light) 82%,
+          #f5ecc9 100%
+        );
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 42px 42px;
+      opacity: 0.4;
+    }
+
+    .light-effect {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(
+          circle 240px at var(--mouse-x) var(--mouse-y),
+          rgba(255, 248, 198, 0.28),
+          rgba(255, 239, 171, 0.12) 38%,
+          transparent 74%
+        );
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      width: min(1180px, 94%);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 56px 20px 20px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--gold-strong);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+    }
+
+    header h1 {
+      font-size: clamp(2.4rem, 7vw, 4.8rem);
+      line-height: 1.04;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      text-shadow: 0 0 22px rgba(255, 243, 198, 0.12);
+    }
+
+    header p {
+      max-width: 760px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .ring-section {
+      padding: 12px 20px 40px;
+    }
+
+    .stage {
+      position: relative;
+      min-height: 600px;
+      padding-top: 32px;
+      padding-bottom: 8px;
+    }
+
+    .info-panel {
+      position: fixed;
+      top: calc((350px * var(--ring-scale)) + 24px);
+      right: 24px;
+      left: auto;
+      transform: none;
+      z-index: 20;
+      width: min(360px, calc(100vw - 48px));
+      padding: 32px;
+      border-radius: 24px;
+      overflow: hidden;
+      isolation: isolate;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.1),
+        0 0 16px rgba(255, 236, 171, 0.03);
+      backdrop-filter: blur(12px);
+      opacity: 0.06;
+      transition:
+        opacity 0.24s ease,
+        transform 0.24s ease,
+        box-shadow 0.24s ease,
+        border-color 0.24s ease,
+        background 0.24s ease;
+    }
+
+    .info-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .info-panel::before,
+    .info-panel::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+      transition: opacity 0.24s ease, transform 0.24s ease;
+    }
+
+    .info-panel::before {
+      top: -88px;
+      right: -44px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 247, 204, 0.62) 0%, rgba(255, 229, 130, 0.24) 38%, transparent 72%);
+      filter: blur(10px);
+      opacity: 0.62;
+      animation: panelGlowPulse 6s ease-in-out infinite;
+    }
+
+    .info-panel::after {
+      inset: 1px;
+      border-radius: inherit;
+      background: linear-gradient(140deg, rgba(255, 247, 212, 0.16), transparent 42%, rgba(255, 255, 255, 0.02) 72%);
+      opacity: 0.55;
+    }
+
+    .info-panel.visible {
+      opacity: 0.12;
+      box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.12),
+        0 0 18px rgba(255, 236, 171, 0.05),
+        0 0 48px rgba(255, 232, 166, 0.08);
+      border-color: rgba(255, 243, 198, 0.14);
+    }
+
+    .info-panel.is-highlighted,
+    .info-panel:hover,
+    .info-panel:focus-within {
+      opacity: 0.95;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+      border-color: rgba(255, 243, 198, 0.3);
+      box-shadow:
+        0 22px 44px rgba(0, 0, 0, 0.22),
+        0 0 34px rgba(255, 236, 171, 0.14),
+        0 0 80px rgba(255, 232, 166, 0.18);
+    }
+
+    .info-panel.is-highlighted::before,
+    .info-panel:hover::before,
+    .info-panel:focus-within::before {
+      opacity: 0.9;
+      transform: scale(1.08);
+    }
+
+    .info-panel h2 {
+      margin-bottom: 10px;
+      color: var(--gold-strong);
+      font-size: 1.45rem;
+    }
+
+    .info-panel p {
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .info-tag {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--gold-strong);
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .feature-callout {
+      position: fixed;
+      top: calc((120px * var(--ring-scale)) + 18px);
+      right: calc((250px * var(--ring-scale)) + 36px);
+      z-index: 35;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      animation: featureCalloutFloat 2.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .feature-callout.is-hidden {
+      opacity: 0;
+      transform: translateX(18px);
+      animation: none;
+    }
+
+    .feature-callout-text {
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 243, 198, 0.28);
+      background: linear-gradient(180deg, rgba(17, 27, 48, 0.92), rgba(8, 13, 26, 0.88));
+      color: var(--gold-strong);
+      font-size: 0.85rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.2),
+        0 0 28px rgba(255, 236, 171, 0.12);
+      text-shadow: 0 0 18px rgba(255, 243, 198, 0.22);
+    }
+
+    .feature-callout-arrow {
+      position: relative;
+      width: calc((88px * var(--ring-scale)) + 12px);
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255, 243, 198, 0.88), rgba(255, 243, 198, 0.18));
+      box-shadow: 0 0 18px rgba(255, 236, 171, 0.18);
+      transform: rotate(-18deg);
+      transform-origin: right center;
+    }
+
+    .feature-callout-arrow::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -2px;
+      width: 12px;
+      height: 12px;
+      border-top: 2px solid rgba(255, 243, 198, 0.88);
+      border-right: 2px solid rgba(255, 243, 198, 0.88);
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    .site-name-placeholder {
+      position: fixed;
+      top: 18px;
+      left: 20px;
+      z-index: 36;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 243, 198, 0.2);
+      background: linear-gradient(180deg, rgba(9, 16, 31, 0.88), rgba(18, 29, 51, 0.72));
+      color: var(--gold-strong);
+      font-size: 0.86rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow:
+        0 12px 26px rgba(0, 0, 0, 0.2),
+        0 0 22px rgba(255, 236, 171, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    @keyframes panelGlowPulse {
+      0%,
+      100% {
+        transform: scale(0.96) translate3d(0, 0, 0);
+      }
+
+      50% {
+        transform: scale(1.08) translate3d(-12px, 10px, 0);
+      }
+    }
+
+    @keyframes featureCalloutFloat {
+      0%,
+      100% {
+        transform: translateX(0) translateY(0);
+      }
+
+      50% {
+        transform: translateX(-4px) translateY(-6px);
+      }
+    }
+
+    .circle-container {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 0;
+      z-index: 30;
+      transform: scale(var(--ring-scale));
+      transform-origin: top right;
+    }
+
+    .corner-button {
+      position: absolute;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      background: transparent;
+      transition: transform 0.28s ease, box-shadow 0.28s ease, filter 0.28s ease, background 0.28s ease, border-color 0.28s ease;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .corner-button:focus-visible {
+      box-shadow: 0 0 0 3px rgba(255, 243, 198, 0.65);
+    }
+
+    .smooth-circle {
+      width: 700px;
+      height: 700px;
+      top: -350px;
+      right: -350px;
+      background: linear-gradient(135deg, rgba(255, 249, 224, 0.78) 0%, rgba(255, 239, 181, 0.46) 100%);
+      box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      z-index: 10;
+    }
+
+    .ring-button {
+      background: rgba(255, 249, 224, 0.025);
+      border: 3px solid rgba(255, 236, 171, 0.22);
+      backdrop-filter: blur(8px);
+    }
+
+    .ring-button::before,
+    .ring-button::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .ring-button::before {
+      inset: 0;
+      border: inherit;
+      opacity: 0.9;
+    }
+
+    .ring-button::after {
+      inset: 12px;
+      border: 2px solid rgba(255, 245, 208, 0.1);
+      opacity: 0.65;
+    }
+
+    .ring-one {
+      width: 590px;
+      height: 590px;
+      top: -295px;
+      right: -295px;
+      z-index: 13;
+    }
+
+    .ring-two {
+      width: 465px;
+      height: 465px;
+      top: -232.5px;
+      right: -232.5px;
+      z-index: 14;
+      border-width: 4px;
+    }
+
+    .ring-three {
+      width: 345px;
+      height: 345px;
+      top: -172.5px;
+      right: -172.5px;
+      z-index: 15;
+    }
+
+    .button-glow {
+      position: absolute;
+      width: 72%;
+      height: 72%;
+      left: 14%;
+      top: 14%;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(22px);
+      opacity: 0;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      background: radial-gradient(circle at center, rgba(255, 243, 198, 0.92) 0%, rgba(255, 231, 147, 0.34) 40%, transparent 72%);
+      mix-blend-mode: screen;
+    }
+
+    .corner-button.is-active {
+      transform: scale(1.03);
+      filter: brightness(1.08);
+    }
+
+    .smooth-circle.is-active {
+      box-shadow:
+        0 0 70px rgba(255, 236, 171, 0.45),
+        0 0 120px rgba(255, 236, 171, 0.2),
+        0 12px 42px rgba(0, 0, 0, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      background: linear-gradient(135deg, rgba(255, 251, 236, 0.98) 0%, rgba(255, 243, 198, 0.9) 100%);
+    }
+
+    .ring-button.is-active {
+      border-color: rgba(255, 243, 198, 0.78);
+      box-shadow:
+        0 0 30px rgba(255, 236, 171, 0.24),
+        inset 0 0 18px rgba(255, 248, 219, 0.18);
+      background: rgba(255, 248, 219, 0.1);
+    }
+
+    .corner-button.is-active .button-glow {
+      opacity: 0.9;
+    }
+
+    .circle-text {
+      display: none;
+    }
+
+    .topic-column {
+      position: fixed;
+      top: 132px;
+      left: 24px;
+      z-index: 24;
+      width: min(210px, 18vw);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .topic-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 420px;
+      opacity: 1;
+      overflow: hidden;
+      transition: max-height 0.28s ease, opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .topic-column.is-collapsed .topic-list {
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+    }
+
+    .topic-button,
+    .topic-toggle {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 243, 198, 0.18);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+      color: var(--text);
+      text-align: left;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+      backdrop-filter: blur(10px);
+      transition:
+        transform 0.22s ease,
+        border-color 0.22s ease,
+        background 0.22s ease,
+        box-shadow 0.22s ease;
+    }
+
+    .topic-toggle {
+      position: relative;
+      padding-right: 42px;
+      color: var(--gold-strong);
+    }
+
+    .topic-toggle::after {
+      content: "-";
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .topic-column.is-collapsed .topic-toggle::after {
+      content: "+";
+    }
+
+    .topic-button:hover,
+    .topic-button:focus-visible,
+    .topic-toggle:hover,
+    .topic-toggle:focus-visible {
+      transform: translateX(4px);
+      border-color: rgba(255, 243, 198, 0.36);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.08));
+      box-shadow:
+        0 16px 34px rgba(0, 0, 0, 0.18),
+        0 0 24px rgba(255, 236, 171, 0.12);
+      outline: none;
+    }
+
+    .text-section {
+      padding: 0 20px 36px;
+    }
+
+    .text-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .text-card {
+      padding: 24px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+      backdrop-filter: blur(10px);
+    }
+
+    .text-card h2 {
+      margin-bottom: 12px;
+      color: var(--gold-strong);
+      font-size: 1.35rem;
+    }
+
+    .text-card p {
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    footer {
+      padding: 18px 20px 32px;
+      text-align: center;
+      color: #24344f;
+    }
+
+    .eyebrow,
+    .info-panel h2 {
+      display: none;
+    }
+
+    @media (min-width: 981px) {
+      body {
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .page {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+      }
+
+      header {
+        padding: 28px 20px 10px;
+      }
+
+      header h1 {
+        font-size: clamp(2rem, 4.6vw, 3.6rem);
+        margin-bottom: 10px;
+      }
+
+      header p {
+        max-width: 640px;
+        font-size: 0.95rem;
+      }
+
+      .ring-section {
+        padding: 0 20px 10px;
+      }
+
+      .stage {
+        min-height: 190px;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .info-panel {
+        top: calc((350px * var(--ring-scale)) + 22px);
+        right: 20px;
+        width: min(320px, calc(100vw - 520px));
+        padding: 22px;
+      }
+
+      .topic-column {
+        top: 108px;
+        left: 20px;
+        width: 190px;
+      }
+
+      .text-section {
+        padding: 0 360px 16px 20px;
+      }
+
+      .text-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .text-card {
+        padding: 16px 18px;
+        border-radius: 18px;
+      }
+
+      .text-card h2 {
+        font-size: 1.05rem;
+        margin-bottom: 8px;
+      }
+
+      .text-card p {
+        font-size: 0.88rem;
+        line-height: 1.38;
+        margin-bottom: 8px;
+      }
+
+      footer {
+        padding: 8px 20px 16px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 980px) {
+      :root {
+        --ring-scale: 0.82;
+      }
+
+      .ring-button {
+        backdrop-filter: blur(4px);
+      }
+
+      .info-panel {
+        backdrop-filter: blur(6px);
+      }
+
+      .info-panel.is-highlighted,
+      .info-panel:hover,
+      .info-panel:focus-within {
+        backdrop-filter: blur(16px);
+        background: linear-gradient(180deg, rgba(10, 16, 32, 0.52), rgba(18, 29, 51, 0.34));
+      }
+
+      .stage {
+        min-height: calc((350px * var(--ring-scale)) + 170px);
+        padding-top: 0;
+        padding-right: 0;
+        padding-bottom: 0;
+      }
+
+      .topic-column {
+        position: relative;
+        top: auto;
+        left: auto;
+        width: min(760px, 94%);
+        margin: 0 auto 18px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .topic-list {
+        flex: 1 1 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+        max-height: 240px;
+      }
+
+      .topic-button {
+        flex: 1 1 150px;
+        text-align: center;
+      }
+
+      .topic-toggle {
+        width: auto;
+        min-width: 160px;
+      }
+
+      .info-panel {
+        position: fixed;
+        top: calc((350px * var(--ring-scale)) + 20px);
+        right: 18px;
+        left: auto;
+        transform: none;
+        z-index: 20;
+        width: min(320px, calc(100vw - 36px));
+      }
+
+      .feature-callout {
+        top: calc((104px * var(--ring-scale)) + 18px);
+        right: calc((214px * var(--ring-scale)) + 28px);
+        gap: 10px;
+      }
+
+      .feature-callout-text {
+        padding: 9px 14px;
+        font-size: 0.78rem;
+        letter-spacing: 0.12em;
+      }
+
+      .feature-callout-arrow {
+        width: calc((72px * var(--ring-scale)) + 10px);
+      }
+
+      .site-name-placeholder {
+        top: 16px;
+        left: 18px;
+        padding: 9px 14px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      :root {
+        --ring-scale: 0.58;
+      }
+
+      .ring-section {
+        padding: 0 16px 8px;
+      }
+
+      .stage {
+        min-height: calc((350px * var(--ring-scale)) + 156px);
+        padding-top: 10px;
+      }
+
+      .ring-button {
+        backdrop-filter: blur(2px);
+      }
+
+      .info-panel {
+        backdrop-filter: blur(3px);
+      }
+
+      .info-panel.is-highlighted,
+      .info-panel:hover,
+      .info-panel:focus-within {
+        backdrop-filter: blur(14px);
+        background: linear-gradient(180deg, rgba(10, 16, 32, 0.66), rgba(18, 29, 51, 0.46));
+      }
+
+      header {
+        padding-top: 56px;
+      }
+
+      .circle-container {
+        position: absolute;
+        top: 10px;
+        right: 0;
+      }
+
+      .info-panel {
+        position: absolute;
+        top: calc((350px * var(--ring-scale)) + 18px);
+        right: 12px;
+        width: min(240px, calc(100vw - 24px));
+        padding: 22px;
+      }
+
+      .feature-callout {
+        top: 248px;
+        right: 18px;
+        gap: 8px;
+      }
+
+      .feature-callout-text {
+        padding: 8px 12px;
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+      }
+
+      .feature-callout-arrow {
+        width: calc((56px * var(--ring-scale)) + 8px);
+      }
+
+      .site-name-placeholder {
+        position: relative;
+        top: auto;
+        left: auto;
+        z-index: 2;
+        display: block;
+        width: fit-content;
+        margin: 0 auto 18px;
+        padding: 8px 12px;
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      :root {
+        --ring-scale: 0.46;
+      }
+
+      .stage {
+        min-height: calc((350px * var(--ring-scale)) + 136px);
+        padding-top: 8px;
+      }
+
+      .ring-button,
+      .info-panel {
+        backdrop-filter: none;
+      }
+
+      .info-panel.is-highlighted,
+      .info-panel:hover,
+      .info-panel:focus-within {
+        backdrop-filter: blur(12px);
+        background: linear-gradient(180deg, rgba(10, 16, 32, 0.76), rgba(18, 29, 51, 0.56));
+      }
+
+      .info-panel {
+        top: calc((350px * var(--ring-scale)) + 16px);
+        right: 10px;
+        width: min(200px, calc(100vw - 20px));
+        padding: 16px;
+      }
+
+      .feature-callout {
+        top: 214px;
+        right: 14px;
+      }
+
+      .feature-callout-text {
+        padding: 7px 10px;
+        font-size: 0.68rem;
+      }
+
+      .feature-callout-arrow {
+        width: calc((46px * var(--ring-scale)) + 6px);
+      }
+
+      .site-name-placeholder {
+        position: relative;
+        top: auto;
+        left: auto;
+        z-index: 2;
+        display: block;
+        width: fit-content;
+        margin: 0 auto 16px;
+        padding: 7px 10px;
+        font-size: 0.68rem;
+      }
+
+      header {
+        padding-top: 52px;
+      }
+
+      .circle-container {
+        top: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="light-effect" aria-hidden="true"></div>
+  <div class="feature-callout" id="featureCallout" aria-hidden="true">
+    <span class="feature-callout-text">Features</span>
+    <span class="feature-callout-arrow"></span>
+  </div>
+
+  <main class="page">
+    <aside class="topic-column is-collapsed" id="topicColumn" aria-label="Awareness Topics">
+      <button class="topic-toggle" id="topicToggle" type="button" aria-expanded="false" aria-controls="topicList">
+        Topics
+      </button>
+      <div class="topic-list" id="topicList">
+        <button class="topic-button" type="button">Cyberbullying</button>
+        <button class="topic-button" type="button">Bullying</button>
+        <button class="topic-button" type="button">Effects</button>
+        <button class="topic-button" type="button">Consequence</button>
+        <button class="topic-button" type="button">Real World Example</button>
+      </div>
+    </aside>
+
+    <div class="site-name-placeholder">Website Name</div>
+
+    <header>
+      <div class="container">
+        <span class="eyebrow">A Safe and Supportive Space</span>
+        <h1>A Light Against Cyberbullying</h1>
+        <p>
+          A safe and supportive space that helps people recognize bullying, report harmful
+          behavior, and find guidance, hope, and protection.
+        </p>
+        <p>
+          Our website is designed to raise awareness about bullying and cyberbullying while
+          giving users helpful tools and support. It offers a calm and welcoming space where
+          visitors can learn about harmful online behavior, analyze messages, report incidents,
+          and explore emotional support features. The goal of the platform is to remind people
+          that they are not alone, and that help, safety, and healing are always possible.
+        </p>
+      </div>
+    </header>
+
+    <section class="ring-section">
+      <div class="container">
+        <div class="stage">
+          <div class="circle-container">
+            <button
+              class="corner-button smooth-circle"
+              type="button"
+              aria-label="Report Bullying"
+              data-title="Report Bullying"
+              data-description="Give users a safe, direct place to report harmful behavior and ask for help before the situation gets worse."
+            >
+              <div class="button-glow"></div>
+              <div class="circle-text">Report Bullying</div>
+            </button>
+            <button
+              class="corner-button ring-button ring-one"
+              type="button"
+              aria-label="AI Chat Support"
+              data-title="AI Chat Support"
+              data-description="Offer calm, supportive AI guidance that helps users feel heard and points them toward trusted support."
+            >
+              <div class="button-glow"></div>
+            </button>
+            <button
+              class="corner-button ring-button ring-two"
+              type="button"
+              aria-label="Message Analyzer"
+              data-title="Message Analyzer"
+              data-description="Analyze messages for harmful language, warning signs, and bullying patterns that may need attention."
+            >
+              <div class="button-glow"></div>
+            </button>
+            <button
+              class="corner-button ring-button ring-three"
+              type="button"
+              aria-label="Wellbeing Tracker"
+              data-title="Wellbeing Tracker"
+              data-description="Help users check in with their feelings and monitor emotional wellbeing over time."
+            >
+              <div class="button-glow"></div>
+            </button>
+          </div>
+          <div class="info-panel visible" id="infoPanel">
+            <h2>Report Bullying</h2>
+            <p>
+              Give users a safe, direct place to report harmful behavior and ask for help
+              before the situation gets worse.
+            </p>
+            <span class="info-tag">Platform Feature</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="text-section">
+      <div class="container">
+        <div class="text-grid">
+          <div class="text-card">
+            <h2>What Bullying Means</h2>
+            <p>
+              Bullying is repeated harmful behavior that can be physical, verbal, social, or emotional.
+              It can include insults, intimidation, exclusion, rumors, threats, or actions meant to make
+              someone feel powerless or afraid.
+            </p>
+            <p>
+              Over time, bullying can affect confidence, school performance, mental health, and a person's
+              sense of safety. That is why early support and intervention matter.
+            </p>
+          </div>
+
+          <div class="text-card">
+            <h2>What Cyberbullying Means</h2>
+            <p>
+              Cyberbullying happens through phones, messages, games, social media, group chats, and other
+              online spaces. Harmful posts, harassment, fake accounts, leaked screenshots, and public shaming
+              can spread quickly and remain visible for a long time.
+            </p>
+            <p>
+              Because digital spaces are always active, cyberbullying can make people feel like there is no
+              escape. This is why reporting tools, message analysis, and trusted support systems are important.
+            </p>
+          </div>
+
+          <div class="text-card">
+            <h2>About This Website</h2>
+            <p>
+              Our website is designed to raise awareness about bullying and cyberbullying while
+              giving users helpful tools and support. It offers a calm and welcoming space where
+              visitors can learn about harmful online behavior, analyze messages, report incidents,
+              and explore emotional support features.
+            </p>
+            <p>
+              The goal of the platform is to remind people that they are not alone, and that
+              help, safety, and healing are always possible.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 A Light Against Cyberbullying. Help, safety, and healing are always possible.</p>
+    </footer>
+  </main>
+
+  <script>
+    const root = document.documentElement;
+    const infoPanel = document.getElementById("infoPanel");
+    const featureCallout = document.getElementById("featureCallout");
+    const topicColumn = document.getElementById("topicColumn");
+    const topicToggle = document.getElementById("topicToggle");
+    const cornerButtons = document.querySelectorAll(".corner-button");
+
+    const showFeature = (feature) => {
+      infoPanel.classList.add("visible");
+      infoPanel.innerHTML = `
+        <h2>${feature.dataset.title}</h2>
+        <p>${feature.dataset.description}</p>
+        <span class="info-tag">Platform Feature</span>
+      `;
+    };
+
+    window.addEventListener("mousemove", (event) => {
+      root.style.setProperty("--mouse-x", event.clientX + "px");
+      root.style.setProperty("--mouse-y", event.clientY + "px");
+    });
+
+    const setGlowPosition = (target, event) => {
+      const glow = target.querySelector(".button-glow");
+      const rect = target.getBoundingClientRect();
+      const glowWidth = rect.width * 0.72;
+      const glowHeight = rect.height * 0.72;
+      const x = event.clientX - rect.left - glowWidth / 2;
+      const y = event.clientY - rect.top - glowHeight / 2;
+      const maxX = rect.width - glowWidth;
+      const maxY = rect.height - glowHeight;
+
+      glow.style.left = Math.min(Math.max(x, 0), maxX) + "px";
+      glow.style.top = Math.min(Math.max(y, 0), maxY) + "px";
+    };
+
+    const activateButton = (target, event) => {
+      const glow = target.querySelector(".button-glow");
+      cornerButtons.forEach((item) => item.classList.remove("is-active"));
+      target.classList.add("is-active");
+      infoPanel.classList.add("is-highlighted");
+      glow.style.transform = "scale(1)";
+
+      if (event) {
+        setGlowPosition(target, event);
+      } else {
+        glow.style.left = "14%";
+        glow.style.top = "14%";
+      }
+
+      showFeature(target);
+    };
+
+    const deactivateButton = (target) => {
+      const glow = target.querySelector(".button-glow");
+      target.classList.remove("is-active");
+      infoPanel.classList.remove("is-highlighted");
+      glow.style.left = "14%";
+      glow.style.top = "14%";
+      glow.style.transform = "scale(0.92)";
+    };
+
+    cornerButtons.forEach((cornerButton) => {
+      cornerButton.addEventListener("mouseenter", (event) => activateButton(cornerButton, event));
+      cornerButton.addEventListener("focus", () => activateButton(cornerButton));
+      cornerButton.addEventListener("mousemove", (event) => setGlowPosition(cornerButton, event));
+      cornerButton.addEventListener("mouseleave", () => deactivateButton(cornerButton));
+      cornerButton.addEventListener("click", (event) => {
+        activateButton(cornerButton, event);
+        cornerButton.style.transform = "scale(0.97)";
+
+        setTimeout(() => {
+          cornerButton.style.transform = "";
+          activateButton(cornerButton);
+        }, 110);
+      });
+    });
+
+    topicToggle.addEventListener("click", () => {
+      const isCollapsed = topicColumn.classList.toggle("is-collapsed");
+      topicToggle.setAttribute("aria-expanded", String(!isCollapsed));
+    });
+
+    window.addEventListener("load", () => {
+      window.setTimeout(() => {
+        featureCallout.classList.add("is-hidden");
+      }, 5000);
+    });
+  </script>
+</body>
+</html>
